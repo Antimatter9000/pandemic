@@ -27,12 +27,6 @@ export default class Stage {
             this.handlePeople();
             this.updateDOM();
             iteration++;
-            if (iteration % 60 === 0) {
-                console.log(`Day ${this.day}`);
-                console.log(`Dead: ${this.people.filter(person => person.stage === STAGES.dead).length}`);
-                console.log(`Alive: ${this.people.filter(person => person.stage !== STAGES.dead).length}`);
-                console.log(`Immune: ${this.people.filter(person => person.stage === STAGES.immune).length}`);
-            }
             if (this.people.filter(person => person.isInfectious).length < 1) {
                 console.log('COMPLETE');
                 this.endAnimation();

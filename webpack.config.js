@@ -6,11 +6,13 @@ module.exports = {
     context: __dirname,
     mode: process.env.NODE_ENV || 'development',
 
-    entry: './src/index.js',
+    entry: {
+        pandemic: './src/index.js'
+    },
 
     output: {
         path: path.join(__dirname, 'dist/'),
-        filename: 'bundle.js'
+        filename: '[name].js'
     },
 
     devServer: {
@@ -36,15 +38,15 @@ module.exports = {
         }],
     },
 
-    // optimization: {
-    //     splitChunks: {
-    //         chunks: 'all'
-    //     }
-    // },
-
-    // plugins: [
-    //   new MiniCssExtractPlugin({
-    //     filename: `styles/[name].css`
-    //   })
-    // ]
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendor",
+                    chunks: "initial",
+                }
+            }
+        }
+    },
 }

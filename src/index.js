@@ -5,7 +5,6 @@ import { config } from './Config';
 let stage = null;
 
 function start() {
-    console.log('starting');
     if (stage) {
         stage.endAnimation();
     }

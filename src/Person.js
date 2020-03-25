@@ -16,10 +16,6 @@ export default class Person {
         this.x = Math.random() * stageWidth;
         this.y = Math.random() * stageHeight;
         this.direction = Math.random() * 360;
-
-        if (this.stage === STAGES.infected) {
-            console.log(this);
-        }
     }
 
     get speed() {
