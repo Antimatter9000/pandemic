@@ -8,13 +8,102 @@
             padding: 0;
             margin: 0;
         }
+
         canvas {
-            background-color: black;
+            background-color: #000033;
+        }
+
+        .controls {
+            position: absolute;
+            z-index: 1;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+        }
+
+        label {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .results {
+            position: absolute;
+            display: flex;
+            justify-content: space-evenly;
+            z-index: 1;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div id="results" class="results">
+        <div class="result">
+            <label for="day">Day</label>
+            <big id="day" name="day"></big>
+        </div>
+
+        <div class="result">
+            <label for="population">Population</label>
+            <big id="population" name="population"></big>
+        </div>
+
+        <div class="result">
+            <label for="infected">Infected</label>
+            <big id="infected" name="infected"></big>
+        </div>
+
+        <div class="result">
+            <label for="immune">Immune</label>
+            <big id="immune" name="immune"></big>
+        </div>
+
+        <div class="result">
+            <label for="dead">Dead</label>
+            <big id="dead" name="dead"></big>
+        </div>
+
+        <div class="result">
+            <label for="funds">Funds</label>
+            <big id="funds" name="funds"></big>
+        </div>
+    </div>
+
     <canvas id="pandemic-canvas"></canvas>
+
+    <div id="controls" class="controls">
+        <label for="speed">Population speed</label>
+        <input type="range" id="speed" name="speed" min="0" max="500" value="100" />
+
+        <label for="infection-rate">Infection Rate</label>
+        <input type="range" id="infection-rate" name="infection-rate" min="0" max="100" value="80" />
+
+        <label for="mortality-rate">Mortality Rate</label>
+        <input type="range" id="mortality-rate" name="mortality-rate" min="0" max="100" value="5" />
+
+        <label for="severity">Severity</label>
+        <input type="range" id="severity" name="severity" min="0" max="100" value="80" />
+
+        <label for="asymptomatic-period">Asymptomatic Period</label>
+        <input type="range" id="asymptomatic-period" name="asymptomatic-period" min="0" max="30" value="5" />
+
+        <label for="symptomatic-period">Symptomatic Period</label>
+        <input type="range" id="symptomatic-period" name="symptomatic-period" min="0" max="30" value="10" />
+
+        <button type="button" id="start-button">Restart</button>
+    </div>
 </body>
 <script src="/bundle.js"></script>
 </html>

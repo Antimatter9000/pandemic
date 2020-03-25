@@ -40,27 +40,45 @@ class Config {
     }
 
     get populationSpeed() {
-        return 100; // Rate of movement of people (px/s)
+        // Rate of movement of people (px/s)
+        return document.getElementById('speed').value
+            ? parseInt(document.getElementById('speed').value)
+            : 100;
     }
 
     get severity() {
-        return 80; // Amount the virus will slow people down (%)
+        // Amount the virus will slow people down (%)
+        return document.getElementById('severity').value
+            ? parseInt(document.getElementById('severity').value)
+            : 80;
     }
 
     get infectionRate() {
-        return 80; // Likelihood of infection (%)
+        // Likelihood of infection (%)
+        return document.getElementById('infection-rate').value
+            ? parseInt(document.getElementById('infection-rate').value)
+            : 80;
     }
 
     get mortalityRate() {
-        return 5; // Likelihood of death (%)
+        // Likelihood of death (%)
+        return document.getElementById('mortality-rate').value
+            ? parseInt(document.getElementById('mortality-rate').value)
+            : 5;
     }
 
     get asymptomaticPeriod() {
-        return 5; // Period during which infected people show no symptoms (days)
+        // Period during which infected people show no symptoms (days)
+        return document.getElementById('mortality-rate').value
+            ? parseInt(document.getElementById('mortality-rate').value)
+            : 5;
     }
 
     get symptomaticPeriod() {
-        return 10; // Period during which infected people have symptoms (days);
+        // Period during which infected people have symptoms (days);
+        return document.getElementById('mortality-rate').value
+            ? parseInt(document.getElementById('mortality-rate').value)
+            : 10;
     }
 }
 
