@@ -29,7 +29,6 @@ export default class Stage {
             iteration++;
             if (this.people.filter(person => person.isInfectious).length < 1) {
                 console.log('COMPLETE');
-                this.endAnimation();
             }
         }, this.frameLength);
     }
@@ -63,7 +62,7 @@ export default class Stage {
     updateDOM() {
         this.updateEl('day', this.day);
         this.updateEl('population', this.people.filter(person => person.stage !== STAGES.dead).length);
-        this.updateEl('infected', this.people.filter(person => person.isInfectious).length);
+        this.updateEl('infected', this.people.filter(person => person.stage >= STAGES.infected).length);
         this.updateEl('immune', this.people.filter(person => person.stage === STAGES.immune).length);
         this.updateEl('dead', this.people.filter(person => person.stage === STAGES.dead).length);
         this.updateEl('funds', Math.floor(this.income - this.outgoings));

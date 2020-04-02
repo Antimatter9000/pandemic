@@ -23,8 +23,20 @@ class Config {
         }
     }
 
+    getVal(id, defaultVal) {
+        const val = document.getElementById(id).value;
+        return val
+            ? (typeof val === 'string' ? parseInt(val) : val)
+            : defaultVal;
+    }
+
     get population() {
-        return 1000; // number of people (#)
+        // number of people (#)
+        return this.getVal('initial-population', 100);
+    }
+
+    get particleRadius() {
+        return 5;
     }
 
     get costOfLiving() {
@@ -41,44 +53,32 @@ class Config {
 
     get populationSpeed() {
         // Rate of movement of people (px/s)
-        return document.getElementById('speed').value
-            ? parseInt(document.getElementById('speed').value)
-            : 100;
+        return this.getVal('speed', 100);
     }
 
     get severity() {
         // Amount the virus will slow people down (%)
-        return document.getElementById('severity').value
-            ? parseInt(document.getElementById('severity').value)
-            : 80;
+        return this.getVal('severity', 80);
     }
 
     get infectionRate() {
         // Likelihood of infection (%)
-        return document.getElementById('infection-rate').value
-            ? parseInt(document.getElementById('infection-rate').value)
-            : 80;
+        return this.getVal('infection-rate', 80);
     }
 
     get mortalityRate() {
         // Likelihood of death (%)
-        return document.getElementById('mortality-rate').value
-            ? parseInt(document.getElementById('mortality-rate').value)
-            : 5;
+        return this.getVal('mortality-rate', 5);
     }
 
     get asymptomaticPeriod() {
         // Period during which infected people show no symptoms (days)
-        return document.getElementById('mortality-rate').value
-            ? parseInt(document.getElementById('mortality-rate').value)
-            : 5;
+        return this.getVal('asymptomatic-period', 5);
     }
 
     get symptomaticPeriod() {
         // Period during which infected people have symptoms (days);
-        return document.getElementById('mortality-rate').value
-            ? parseInt(document.getElementById('mortality-rate').value)
-            : 10;
+        return this.getVal('symptomatic-period', 10);
     }
 }
 

@@ -13,5 +13,10 @@ function start() {
     stage.animate();
 }
 
+if (!window.location.search.includes('hideControls=true')) {
+    document.getElementById('controls').classList.remove('hidden');
+    document.getElementById('results').classList.remove('hidden');
+}
+
 start();
 document.getElementById('start-button').onclick = start;

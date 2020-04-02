@@ -12,7 +12,7 @@ export default class Person {
                 Date.now() + (config.asymptomaticPeriod * config.dayLength)
             ), STAGES.infected)
             : STAGES.unaffected;
-        this.radius = 1.5;
+        this.radius = config.particleRadius;
         this.x = Math.random() * stageWidth;
         this.y = Math.random() * stageHeight;
         this.direction = Math.random() * 360;
