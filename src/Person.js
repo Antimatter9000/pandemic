@@ -5,9 +5,9 @@ function toRad(angle) {
 }
 
 export default class Person {
-    constructor(stageWidth, stageHeight) {
+    constructor(stageWidth, stageHeight, infected) {
         const diceRoll = Math.random() * 100;
-        this.stage = diceRoll < 1
+        this.stage = (diceRoll < 1) || infected
             ? (this.startSymptomsTime = new Date(
                 Date.now() + (config.asymptomaticPeriod * config.dayLength)
             ), STAGES.infected)

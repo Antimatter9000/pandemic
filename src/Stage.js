@@ -12,10 +12,13 @@ export default class Stage {
         this.income = 0;
         this.outgoings = 0;
         this.frameLength = 1000/config.fps;
+
+        this.people = [];
     }
 
     add(people) {
-        this.people = people;
+        const peopleArr = people.length ? people : [people];
+        this.people = [...this.people, ...peopleArr];
     }
 
     animate() {
