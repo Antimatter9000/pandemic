@@ -20,9 +20,40 @@
         .info {
             position: absolute;
             z-index: 1;
-            top: 40px;
-            right: 20px;
-            width: 200px;
+        }
+
+        @media (max-width: 699px) {
+            .mobile-buttons {
+                position: absolute;
+                bottom: 14%;
+                width: 90%;
+                left: 5%;
+                height: 30px;
+                display: flex;
+                z-index: 2;
+            }
+
+            .mobile-buttons button {
+                background-color: firebrick;
+                color: white;
+                flex: 1;
+                margin: 10px 5px;
+                height: 40px;
+                transform: skew(-17deg);
+                border-radius: 3px;
+            }
+        }
+
+        @media (min-width: 700px) {
+            .info {
+                top: 40px;
+                right: 20px;
+                width: 200px;
+            }
+
+            .mobile-buttons {
+                display: none;
+            }
         }
 
         .controls {
@@ -30,6 +61,39 @@
             padding: 20px;
             background-color: rgba(255,255,0,1);
             color: black;
+
+            background: linear-gradient(-45deg, yellow, rgba(255, 255, 175, 0.8));
+            color: black;
+            border: 5px yellow;
+            border-style: solid;
+        }
+
+        @media (max-width: 699px) {
+            .visible {
+                width: 90%;
+                height: 60%;
+                top: 17%;
+                left: 5%;
+                position: fixed;
+            }
+        }
+
+        .control {
+            display: flex;
+        }
+
+        .control input {
+            flex: 1;
+        }
+
+        .control span {
+            flex-basis: 2.5rem;
+            text-align: right;
+        }
+
+        h3 {
+            margin: 0;
+            text-align: center;
         }
 
         label {
@@ -47,12 +111,20 @@
         }
 
         .results {
-            margin-top: 20px;
-            width: 100%;
-            padding: 20px;
             background-color: rgba(255,255,0,1);
+            padding: 20px;
+            background-color: white;
+            background: linear-gradient(-45deg, yellow, rgba(255, 255, 100, 0.8));
             color: black;
             text-align: right;
+            border: 5px yellow;
+            border-style: solid;
+        }
+
+        @media (min-width: 700px) {
+            .results {
+                margin-top: 20px;
+            }
         }
 
         .result {
@@ -62,6 +134,10 @@
         .hidden {
             display: none;
         }
+
+        .visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -69,26 +145,47 @@
 
     <div class="info">
         <div id="controls" class="controls hidden">
-            <label for="initial-population">Initial population</label>
-            <input type="range" id="initial-population" name="initial-population" min="0" max="500" value="100" />
+            <label for="initial-population">Initial population (#)</label>
+            <div class="control">
+                <input type="range" id="initial-population" name="initial-population" min="0" max="500" value="100" />
+                <span id="initial-population-value">100</span>
+            </div>
 
-            <label for="speed">Population speed</label>
-            <input type="range" id="speed" name="speed" min="0" max="500" value="100" />
+            <label for="speed">Population speed (px/s)</label>
+            <div class="control">
+                <input type="range" id="speed" name="speed" min="0" max="500" value="100" />
+                <span id="speed-value">100</span>
+            </div>
 
-            <label for="infection-rate">Infection Rate</label>
-            <input type="range" id="infection-rate" name="infection-rate" min="0" max="100" value="80" />
+            <label for="infection-rate">Infection Rate (%)</label>
+            <div class="control">
+                <input type="range" id="infection-rate" name="infection-rate" min="0" max="100" value="80" />
+                <span id="infection-rate-value">80</span>
+            </div>
 
-            <label for="mortality-rate">Mortality Rate</label>
-            <input type="range" id="mortality-rate" name="mortality-rate" min="0" max="100" value="5" />
+            <label for="mortality-rate">Mortality Rate (%)</label>
+            <div class="control">
+                <input type="range" id="mortality-rate" name="mortality-rate" min="0" max="100" value="5" />
+                <span id="mortality-rate-value">5</span>
+            </div>
 
-            <label for="severity">Severity</label>
-            <input type="range" id="severity" name="severity" min="0" max="100" value="80" />
+            <label for="severity">Severity (%)</label>
+            <div class="control">
+                <input type="range" id="severity" name="severity" min="0" max="100" value="80" />
+                <span id="severity-value">80</span>
+            </div>
 
-            <label for="asymptomatic-period">Asymptomatic Period</label>
-            <input type="range" id="asymptomatic-period" name="asymptomatic-period" min="0" max="30" value="5" />
+            <label for="asymptomatic-period">Asymptomatic Period (days)</label>
+            <div class="control">
+                <input type="range" id="asymptomatic-period" name="asymptomatic-period" min="0" max="30" value="5" />
+                <span id="asymptomatic-period-value">5</span>
+            </div>
 
-            <label for="symptomatic-period">Symptomatic Period</label>
-            <input type="range" id="symptomatic-period" name="symptomatic-period" min="0" max="30" value="10" />
+            <label for="symptomatic-period">Symptomatic Period (days)</label>
+            <div class="control">
+                <input type="range" id="symptomatic-period" name="symptomatic-period" min="0" max="30" value="10" />
+                <span id="symptomatic-period-value">10</span>
+            </div>
 
             <button type="button" id="start-button">Restart</button>
         </div>
@@ -124,6 +221,11 @@
                 <big id="funds" name="funds"></big>
             </div>
         </div>
+    </div>
+
+    <div class="mobile-buttons">
+        <button id="controls-toggle" onclick="document.getElementById('controls').classList.add('visible');">Controls</button>
+        <button id="results-toggle" onclick="document.getElementById('results').classList.add('visible');">Results</button>
     </div>
 </body>
 <script src="/dist/vendor.js"></script>
