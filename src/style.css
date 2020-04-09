@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;1,500&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Exo 2';
+}
+
+button {
+    font-family: 'Exo 2';
+    position: relative;
+}
+
+.info {
+    position: absolute;
+    z-index: 1;
+}
+
+@media (max-width: 699px) {
+    .mobile-buttons {
+        position: absolute;
+        bottom: 14%;
+        width: 90%;
+        left: 5%;
+        height: 30px;
+        display: flex;
+        z-index: 2;
+    }
+
+    .mobile-buttons button {
+        background-color: firebrick;
+        color: white;
+        flex: 1;
+        margin: 10px 5px;
+        height: 40px;
+        transform: skew(-17deg);
+        border-radius: 3px;
+        background: linear-gradient(to bottom, #faf 0%,#8f0ab1 48%,#3a0a3c 52%,#7c237d 100%);
+    }
+}
+
+@media (min-width: 700px) {
+    .info {
+        top: 40px;
+        right: 20px;
+        width: 200px;
+    }
+
+    .mobile-buttons {
+        display: none;
+    }
+}
+
+.controls {
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(0,0,33,0.8);
+    color: white;
+
+    /*background: linear-gradient(-45deg, yellow, rgba(255, 255, 175, 0.8));*/
+    border: 1px solid #faf;
+}
+
+@media (max-width: 699px) {
+    .visible {
+        width: 90%;
+        height: 60%;
+        top: 17%;
+        left: 5%;
+        position: fixed;
+    }
+}
+
+.control {
+    display: flex;
+}
+
+.control input {
+    flex: 1;
+}
+
+.control strong {
+    flex-basis: 2.5rem;
+    text-align: right;
+}
+
+.controls button {
+    width: 100%;
+    color: white;
+    background-color: #000033;
+    padding: 8px;
+    background: linear-gradient(to bottom, #faf 0%,#8f0ab1 48%,#3a0a3c 52%,#7c237d 100%);
+    border: 2px solid #f8a3f9;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-top: 20px;
+}
+
+.controls button:active {
+    color: yellow;
+}
+.controls button:active:after,
+.mobile-buttons button:active:after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(yellow, transparent);
+    mix-blend-mode: luminosity;
+    content: '';
+}
+
+h3 {
+    margin: 0;
+    text-align: center;
+}
+
+label {
+    display: block;
+}
+
+big {
+    font-size: 1.7rem;
+}
+
+input {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.results {
+    background-color: rgba(255,255,0,1);
+    padding: 20px;
+    background-color: white;
+/*    background: linear-gradient(-45deg, yellow, rgba(255, 255, 100, 0.8));
+*/    color: black;
+    text-align: right;
+    border: 5px yellow;
+    border-style: solid;
+
+    background-color: rgba(0,0,33,0.8);
+    color: white;
+
+    /*background: linear-gradient(-45deg, yellow, rgba(255, 255, 175, 0.8));*/
+    border: 1px solid #faf;
+}
+
+@media (min-width: 700px) {
+    .results {
+        margin-top: 20px;
+    }
+}
+
+.result {
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}

@@ -1,6 +1,7 @@
 import Stage from './Stage';
 import Person from './Person';
 import { config } from './Config';
+import './style.css';
 
 let stage = null;
 
