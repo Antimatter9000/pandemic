@@ -141,7 +141,7 @@ input {
     background-color: white;
 /*    background: linear-gradient(-45deg, yellow, rgba(255, 255, 100, 0.8));
 */    color: black;
-    text-align: right;
+    text-align: center;
     border: 5px yellow;
     border-style: solid;
 
@@ -152,6 +152,11 @@ input {
     border: 1px solid #faf;
 }
 
+.results-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 @media (min-width: 700px) {
     .results {
         margin-top: 20px;
@@ -159,7 +164,12 @@ input {
 }
 
 .result {
+    flex-basis: 50%;
     margin-bottom: 10px;
+}
+
+.result.big {
+    flex-basis: 100%;
 }
 
 .hidden {

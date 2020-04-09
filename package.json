@@ -25,13 +25,14 @@
   },
   "homepage": "https://github.com/Antimatter9000/pandemic#readme",
   "dependencies": {
-    "webpack-dev-server": "^3.10.3"
+    "scrapyard": "git+https://github.com/Antimatter9000/scrapyard.git"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.1.0",
     "webpack": "^4.42.0",
+    "webpack-dev-server": "^3.10.3",
     "webpack-cli": "^3.3.11"
   }
 }

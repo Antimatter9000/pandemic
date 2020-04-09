@@ -1,4 +1,7 @@
+import { addCommas } from 'scrapyard';
 import { config, STAGES } from './Config';
+
+console.log(addCommas);
 
 export default class Stage {
     constructor(canvasEl) {
@@ -68,7 +71,7 @@ export default class Stage {
         this.updateEl('infected', this.people.filter(person => person.stage >= STAGES.infected).length);
         this.updateEl('immune', this.people.filter(person => person.stage === STAGES.immune).length);
         this.updateEl('dead', this.people.filter(person => person.stage === STAGES.dead).length);
-        this.updateEl('funds', Math.floor(this.income - this.outgoings));
+        this.updateEl('funds', addCommas(Math.floor(this.income - this.outgoings)));
     }
 
     updateEl(id, val) {
