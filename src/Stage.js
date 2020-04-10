@@ -1,10 +1,9 @@
 import { addCommas } from 'scrapyard';
 import { config, STAGES } from './Config';
 
-console.log(addCommas);
-
 export default class Stage {
-    constructor(canvasEl) {
+    constructor(canvasEl, curve) {
+        this.curve = curve;
         this.ctx = canvasEl.getContext('2d');
         this.width = window.innerWidth;
         this.height = window.innerHeight;
@@ -12,11 +11,13 @@ export default class Stage {
         this.ctx.canvas.height = this.height;
 
         this.day = 0;
+        this.infected = 0;
         this.income = 0;
         this.outgoings = 0;
         this.frameLength = 1000/config.fps;
 
         this.people = [];
+        this.complete = false;
     }
 
     add(people) {
@@ -31,10 +32,28 @@ export default class Stage {
             this.calculateDay(iteration);
             this.calculateCosts();
             this.handlePeople();
+            this.updateValues();
             this.updateDOM();
             iteration++;
             if (this.people.filter(person => person.isInfectious).length < 1) {
-                console.log('COMPLETE');
+                this.complete = true;
+                document.getElementById('complete-modal-wrapper').classList.add('visible');
+                let message = 'The virus has run its course. ';
+                const totalInfected = (this.people.filter(person => (
+                    person.stage !== STAGES.unaffected
+                )).length/this.people.length) * 100;
+                message += `${totalInfected}% of the population got infected. `;
+                const totalDead = (this.people.filter(person => (
+                    person.stage === STAGES.dead
+                )).length/this.people.length) * 100;
+                message += `${totalDead}% of the population died. `;
+                if (this.income < 0) {
+                    message += 'The economy is ruined.';
+                } else {
+                    message += 'The economy survived.'
+                }
+                document.getElementById('complete-modal-message').textContent = message;
+                clearInterval(this.animation);
             }
         }, this.frameLength);
     }
@@ -45,7 +64,14 @@ export default class Stage {
 
     calculateDay(i) {
         const msPassed = i * this.frameLength;
-        this.day = Math.floor(msPassed/config.dayLength);
+        const savedDay = this.day;
+        const realDay = Math.floor(msPassed/config.dayLength);
+        if (realDay !== savedDay) {
+            this.day += realDay - savedDay;
+            if (!this.complete) {
+                this.curve.update(this.day, this.infected);
+            }
+        }
     }
 
     calculateCosts() {
@@ -56,20 +82,26 @@ export default class Stage {
     handlePeople() {
         this.people.forEach(person => {
             if (person.stage !== STAGES.dead) {
-                person.progressStages();
+                person.progressStages(this.day);
                 person.getDistance(this.width, this.height);
-                this.income += person.income/config.fps;
-                person.handleInteractions(this.people);
+                const maxIncomePerFrame = person.income/config.fps;
+                const relativeDistance = person.distance/person.maxDistance;
+                this.income += maxIncomePerFrame * relativeDistance;
+                person.handleInteractions(this.people, this.day);
                 person.move();
             }
             person.draw(this.ctx);
         });
     }
 
+    updateValues() {
+        this.infected = this.people.filter(person => person.isInfectious).length;
+    }
+
     updateDOM() {
         this.updateEl('day', this.day);
         this.updateEl('population', this.people.filter(person => person.stage !== STAGES.dead).length);
-        this.updateEl('infected', this.people.filter(person => person.stage >= STAGES.infected).length);
+        this.updateEl('infected', this.infected);
         this.updateEl('immune', this.people.filter(person => person.stage === STAGES.immune).length);
         this.updateEl('dead', this.people.filter(person => person.stage === STAGES.dead).length);
         this.updateEl('funds', addCommas(Math.floor(this.income - this.outgoings)));

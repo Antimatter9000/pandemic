@@ -1,4 +1,5 @@
 import Stage from './Stage';
+import Curve from './Curve';
 import Person from './Person';
 import { config } from './Config';
 import './style.css';
@@ -6,12 +7,15 @@ import './style.css';
 let stage = null;
 
 function start() {
+    document.getElementById('controls').classList.remove('visible');
+    document.getElementById('complete-modal-wrapper').classList.remove('visible');
     if (stage) {
         stage.endAnimation();
     }
-    stage = new Stage(document.getElementById('pandemic-canvas'));
+    const curve = new Curve(document.getElementById('curve'));
+    stage = new Stage(document.getElementById('pandemic-canvas'), curve);
     stage.add([...Array(config.population - 1)].map(item => new Person(stage.width, stage.height, false)));
-    stage.add(new Person(stage.width, stage.height, true))
+    stage.add(new Person(stage.width, stage.height, true));
     stage.animate();
 }
 
@@ -47,7 +51,7 @@ document.getElementById('results-toggle').onclick = () => {
 }
 
 start();
-document.getElementById('start-button').onclick = () => {
-    document.getElementById('controls').classList.remove('visible');
-    start();
-}
+document.getElementById('start-button').onclick = start;
+document.getElementById('restart-button').onclick = start;
+
+

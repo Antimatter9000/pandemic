@@ -23,17 +23,14 @@ export default class Person {
     constructor(stageWidth, stageHeight, infected) {
         const diceRoll = Math.random() * 100;
         this.stage = (diceRoll < 1) || infected
-            ? (this.startSymptomsTime = new Date(
-                Date.now() + (config.asymptomaticPeriod * config.dayLength)
-            ), STAGES.infected)
+            ? (this.startSymptomsDay = config.asymptomaticPeriod, STAGES.infected)
             : STAGES.unaffected;
         this.radius = config.particleRadius;
         this.x = Math.random() * stageWidth;
         this.y = Math.random() * stageHeight;
         this.direction = Math.random() * 360;
 
-        const maxSpeed = this.speed;
-        this.maxDistance = this.speed/config.fps;
+        this.maxDistance = config.maxSpeed/config.fps;
     }
 
     get speed() {
@@ -53,19 +50,16 @@ export default class Person {
             : config.dailyIncome
     }
 
-    progressStages() {
-        const now = new Date();
+    progressStages(day) {
         switch (this.stage) {
             case STAGES.infected:
-                if (now >= this.startSymptomsTime) {
+                if (day >= this.startSymptomsDay) {
                     this.stage = STAGES.symptomatic;
-                    this.endSymptomsTime = new Date(
-                        Date.now() + (config.symptomaticPeriod * config.dayLength)
-                    );
+                    this.endSymptomsDay = this.startSymptomsDay + config.symptomaticPeriod;
                 }
                 break;
             case STAGES.symptomatic:
-                if (now >= this.endSymptomsTime) {
+                if (day >= this.endSymptomsDay) {
                     this.endSymptoms();
                 }
                 break;
@@ -115,47 +109,47 @@ export default class Person {
         this.y += this.yDistance;
     }
 
-    handleInteractions(otherPeople) {
+    handleInteractions(otherPeople, day) {
         if (this.stage === STAGES.unaffected) {
             otherPeople.forEach(otherPerson => {
-                handleSymptomatic.call(this, otherPerson);
-                handleInfectious.call(this, otherPerson);
+                // handleSymptomatic.call(this, otherPerson);
+                handleInfectious.call(this, otherPerson, day);
             });
         }
 
-        function handleSymptomatic(otherPerson) {
-            if (otherPerson.stage === STAGES.symptomatic) {
-                const xDistance2Other = otherPerson.x - this.x;
-                const yDistance2Other = Math.abs(otherPerson.y - this.y);
-                const distance2Other = Math.sqrt((xDistance2Other ** 2) + (yDistance2Other ** 2));
-                const repulsion = distance2Other - config.socialDistance < 0
-                    ? (Math.abs(distance2Other - config.socialDistance)/config.socialDistance) * config.severity
-                    : 0;
+        // function handleSymptomatic(otherPerson) {
+        //     if (otherPerson.stage === STAGES.symptomatic) {
+        //         const xDistance2Other = otherPerson.x - this.x;
+        //         const yDistance2Other = Math.abs(otherPerson.y - this.y);
+        //         const distance2Other = Math.sqrt((xDistance2Other ** 2) + (yDistance2Other ** 2));
+        //         const repulsion = distance2Other - config.socialDistance < 0
+        //             ? (Math.abs(distance2Other - config.socialDistance)/config.socialDistance) * config.severity
+        //             : 0;
 
-                if (repulsion > 0) {
-                    repelX.call(this, otherPerson, repulsion, xDistance2Other);
-                    repelY.call(this, otherPerson, repulsion, yDistance2Other);
-                }
-            }
+        //         if (repulsion > 0) {
+        //             repelX.call(this, otherPerson, repulsion, xDistance2Other);
+        //             repelY.call(this, otherPerson, repulsion, yDistance2Other);
+        //         }
+        //     }
 
-            function repelX(otherPerson, repulsion, xDistance2Other) {
-                const maxXDistance = this.maxDistance * Math.cos(toRad(90) - toRad(this.direction));
-                const xRepulsionEffect = maxXDistance * (repulsion/100);
-                this.xDistance = xDistance2Other > 0 // the infected person is to the right
-                    ? this.xDistance - xRepulsionEffect
-                    : this.xDistance + xRepulsionEffect;
-            }
+        //     function repelX(otherPerson, repulsion, xDistance2Other) {
+        //         const maxXDistance = this.maxDistance * Math.cos(toRad(90) - toRad(this.direction));
+        //         const xRepulsionEffect = maxXDistance * (repulsion/100);
+        //         this.xDistance = xDistance2Other > 0 // the infected person is to the right
+        //             ? this.xDistance - xRepulsionEffect
+        //             : this.xDistance + xRepulsionEffect;
+        //     }
 
-            function repelY(otherPerson, repulsion, yDistance2Other) {
-                const maxYDistance = this.distance * Math.cos(toRad(this.direction));
-                const yRepulsionEffect = maxYDistance * (repulsion/100);
-                this.yDistance = yDistance2Other > 0
-                    ? this.yDistance - yRepulsionEffect
-                    : this.yDistance + yRepulsionEffect;
-            }
-        }
+        //     function repelY(otherPerson, repulsion, yDistance2Other) {
+        //         const maxYDistance = this.distance * Math.cos(toRad(this.direction));
+        //         const yRepulsionEffect = maxYDistance * (repulsion/100);
+        //         this.yDistance = yDistance2Other > 0
+        //             ? this.yDistance - yRepulsionEffect
+        //             : this.yDistance + yRepulsionEffect;
+        //     }
+        // }
 
-        function handleInfectious(otherPerson) {
+        function handleInfectious(otherPerson, day) {
             if (otherPerson.isInfectious
               && (otherPerson.x >= this.x - 10 && otherPerson.x <= this.x + 10)
               && (otherPerson.y >= this.y - 10 && otherPerson.y <= this.y + 10)
@@ -163,9 +157,7 @@ export default class Person {
                 const diceRoll = Math.random() * 100;
                 if (diceRoll <= config.infectionRate) {
                     this.stage = STAGES.infected;
-                    this.startSymptomsTime = new Date(
-                        Date.now() + (config.asymptomaticPeriod * config.dayLength)
-                    );
+                    this.startSymptomsDay = day + config.asymptomaticPeriod;
                 }
             }
         }

@@ -67,6 +67,10 @@
                     <big id="day" name="day"></big>
                 </div>
 
+                <div class="result big">
+                    <canvas id="curve" class="curve-canvas" width="100" height="60"></canvas>
+                </div>
+
                 <div class="result">
                     <label for="population">Population</label>
                     <big id="population" name="population"></big>
@@ -92,6 +96,14 @@
                     <big id="funds" name="funds"></big>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="complete-modal-wrapper" class="complete-modal-wrapper">
+        <div class="complete-modal">
+            <h2>Complete</h2>
+            <p id="complete-modal-message" class="complete-modal-message"></p>
+            <button id="restart-button">Start again</button>
         </div>
     </div>
 

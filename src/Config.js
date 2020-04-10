@@ -16,11 +16,12 @@ export const COLOURS = {
 
 class Config {
     constructor() {
-        this.fps = 60;
+        this.fps = 30;
         this.infectiousRange = {
             min: 1,
             max: 2
-        }
+        };
+        this.maxSpeed = 500;
     }
 
     getVal(id, defaultVal) {
@@ -40,11 +41,11 @@ class Config {
     }
 
     get costOfLiving() {
-        return 100; // daily cost of living per person
+        return 80; // daily cost of living per person
     }
 
     get dailyIncome() {
-        return 150; // daily income of person at max movement
+        return 500; // daily income of person at max movement
     }
 
     get dayLength() {

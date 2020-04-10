@@ -14,6 +14,12 @@ body {
 button {
     font-family: 'Exo 2';
     position: relative;
+    background: linear-gradient(to bottom, #faf 0%,#8f0ab1 48%,#3a0a3c 52%,#7c237d 100%);
+    border: 2px solid #f8a3f9;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: white;
+    padding: 8px 20px;
 }
 
 .info {
@@ -91,13 +97,6 @@ button {
 
 .controls button {
     width: 100%;
-    color: white;
-    background-color: #000033;
-    padding: 8px;
-    background: linear-gradient(to bottom, #faf 0%,#8f0ab1 48%,#3a0a3c 52%,#7c237d 100%);
-    border: 2px solid #f8a3f9;
-    border-radius: 3px;
-    font-size: 0.8rem;
     margin-top: 20px;
 }
 
@@ -124,6 +123,8 @@ h3 {
 
 label {
     display: block;
+    font-size: 0.8rem;
+    color: #ccc;
 }
 
 big {
@@ -173,10 +174,44 @@ input {
     flex-basis: 100%;
 }
 
+.curve-canvas {
+    width: 100%;
+    height: 60px;
+    border-left: 1px solid #faf;
+    border-bottom: 1px solid #faf;
+}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .visible {
-    display: block;
+    display: block !important;
 }
+
+.complete-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    border: 1px solid #faf;
+    color: white;
+    padding: 0 20px 20px;
+    width: 86%;
+    max-width: 500px;
+}
+
+.complete-modal-wrapper {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+}
+
+
