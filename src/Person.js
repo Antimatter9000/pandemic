@@ -4,6 +4,21 @@ function toRad(angle) {
     return angle * (Math.PI/180);
 }
 
+const diameter = config.particleRadius * 2;
+
+function getAssets() {
+    return Object.keys(STAGES).reduce((obj, stage) => {
+        const img = new Image(diameter, diameter);
+        img.src = `/images/pandemic/${stage}.png`;
+        return {
+            ...obj,
+            [STAGES[stage]]: img
+        }
+    }, {});
+}
+
+const ASSETS = getAssets();
+
 export default class Person {
     constructor(stageWidth, stageHeight, infected) {
         const diceRoll = Math.random() * 100;
@@ -16,6 +31,9 @@ export default class Person {
         this.x = Math.random() * stageWidth;
         this.y = Math.random() * stageHeight;
         this.direction = Math.random() * 360;
+
+        const maxSpeed = this.speed;
+        this.maxDistance = this.speed/config.fps;
     }
 
     get speed() {
@@ -65,7 +83,7 @@ export default class Person {
         }
     }
 
-    move(stageWidth, stageHeight) {
+    getDistance(stageWidth, stageHeight) {
         let walls = {
             upper: 0,
             right: stageWidth,
@@ -90,7 +108,9 @@ export default class Person {
         this.distance = this.speed/config.fps;
         this.xDistance = this.distance * Math.cos(toRad(90) - toRad(this.direction));
         this.yDistance = this.distance * Math.cos(toRad(this.direction));
+    }
 
+    move() {
         this.x += this.xDistance;
         this.y += this.yDistance;
     }
@@ -98,27 +118,60 @@ export default class Person {
     handleInteractions(otherPeople) {
         if (this.stage === STAGES.unaffected) {
             otherPeople.forEach(otherPerson => {
-                if (otherPerson.isInfectious
-                    && (otherPerson.x >= this.x - 10 && otherPerson.x <= this.x + 10)
-                    && (otherPerson.y >= this.y - 10 && otherPerson.y <= this.y + 10)
-                ) {
-                    const diceRoll = Math.random() * 100;
-                    if (diceRoll <= config.infectionRate) {
-                        this.stage = STAGES.infected;
-                        this.startSymptomsTime = new Date(
-                            Date.now() + (config.asymptomaticPeriod * config.dayLength)
-                        );
-                    }
-                }
+                handleSymptomatic.call(this, otherPerson);
+                handleInfectious.call(this, otherPerson);
             });
+        }
+
+        function handleSymptomatic(otherPerson) {
+            if (otherPerson.stage === STAGES.symptomatic) {
+                const xDistance2Other = otherPerson.x - this.x;
+                const yDistance2Other = Math.abs(otherPerson.y - this.y);
+                const distance2Other = Math.sqrt((xDistance2Other ** 2) + (yDistance2Other ** 2));
+                const repulsion = distance2Other - config.socialDistance < 0
+                    ? (Math.abs(distance2Other - config.socialDistance)/config.socialDistance) * config.severity
+                    : 0;
+
+                if (repulsion > 0) {
+                    repelX.call(this, otherPerson, repulsion, xDistance2Other);
+                    repelY.call(this, otherPerson, repulsion, yDistance2Other);
+                }
+            }
+
+            function repelX(otherPerson, repulsion, xDistance2Other) {
+                const maxXDistance = this.maxDistance * Math.cos(toRad(90) - toRad(this.direction));
+                const xRepulsionEffect = maxXDistance * (repulsion/100);
+                this.xDistance = xDistance2Other > 0 // the infected person is to the right
+                    ? this.xDistance - xRepulsionEffect
+                    : this.xDistance + xRepulsionEffect;
+            }
+
+            function repelY(otherPerson, repulsion, yDistance2Other) {
+                const maxYDistance = this.distance * Math.cos(toRad(this.direction));
+                const yRepulsionEffect = maxYDistance * (repulsion/100);
+                this.yDistance = yDistance2Other > 0
+                    ? this.yDistance - yRepulsionEffect
+                    : this.yDistance + yRepulsionEffect;
+            }
+        }
+
+        function handleInfectious(otherPerson) {
+            if (otherPerson.isInfectious
+              && (otherPerson.x >= this.x - 10 && otherPerson.x <= this.x + 10)
+              && (otherPerson.y >= this.y - 10 && otherPerson.y <= this.y + 10)
+            ) {
+                const diceRoll = Math.random() * 100;
+                if (diceRoll <= config.infectionRate) {
+                    this.stage = STAGES.infected;
+                    this.startSymptomsTime = new Date(
+                        Date.now() + (config.asymptomaticPeriod * config.dayLength)
+                    );
+                }
+            }
         }
     }
 
     draw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI, false);
-        ctx.fillStyle = COLOURS[this.stage];
-        ctx.fill();
-        ctx.closePath();
+        ctx.drawImage(ASSETS[this.stage], this.x - config.particleRadius, this.y - config.particleRadius, diameter, diameter);
     }
 }

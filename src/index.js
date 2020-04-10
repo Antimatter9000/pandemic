@@ -10,7 +10,7 @@ function start() {
         stage.endAnimation();
     }
     stage = new Stage(document.getElementById('pandemic-canvas'));
-    stage.add([...Array(config.population)].map(item => new Person(stage.width, stage.height, false)));
+    stage.add([...Array(config.population - 1)].map(item => new Person(stage.width, stage.height, false)));
     stage.add(new Person(stage.width, stage.height, true))
     stage.animate();
 }
@@ -34,6 +34,7 @@ setupInputListener('mortality-rate');
 setupInputListener('severity');
 setupInputListener('asymptomatic-period');
 setupInputListener('symptomatic-period');
+setupInputListener('social-distance');
 
 document.getElementById('controls-toggle').onclick = () => {
     document.getElementById('results').classList.remove('visible');

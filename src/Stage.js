@@ -57,11 +57,12 @@ export default class Stage {
         this.people.forEach(person => {
             if (person.stage !== STAGES.dead) {
                 person.progressStages();
-                person.move(this.width, this.height);
+                person.getDistance(this.width, this.height);
                 this.income += person.income/config.fps;
                 person.handleInteractions(this.people);
-                person.draw(this.ctx);
+                person.move();
             }
+            person.draw(this.ctx);
         });
     }
 

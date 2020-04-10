@@ -36,7 +36,7 @@ class Config {
     }
 
     get particleRadius() {
-        return 5;
+        return 12;
     }
 
     get costOfLiving() {
@@ -79,6 +79,11 @@ class Config {
     get symptomaticPeriod() {
         // Period during which infected people have symptoms (days);
         return this.getVal('symptomatic-period', 10);
+    }
+
+    get socialDistance() {
+        // Period during which infected people have symptoms (days);
+        return this.getVal('social-distance', 100);
     }
 }
 
