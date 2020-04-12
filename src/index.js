@@ -30,7 +30,6 @@ if (!window.location.search.includes('hideControls=true')) {
     document.getElementById('results').classList.remove('hidden');
 }
 
-
 setupInputListener('initial-population');
 setupInputListener('speed');
 setupInputListener('infection-rate');

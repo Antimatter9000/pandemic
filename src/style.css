@@ -22,6 +22,18 @@ button {
     padding: 8px 20px;
 }
 
+button:active:after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(yellow, transparent);
+    mix-blend-mode: luminosity;
+    content: '';
+}
+
+
 .info {
     position: absolute;
     z-index: 1;
@@ -102,18 +114,6 @@ button {
 
 .controls button:active {
     color: yellow;
-}
-
-.controls button:active:after,
-.mobile-buttons button:active:after {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: radial-gradient(yellow, transparent);
-    mix-blend-mode: luminosity;
-    content: '';
 }
 
 h3 {

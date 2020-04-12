@@ -42,7 +42,7 @@ export default class Stage {
                 const totalInfected = (this.people.filter(person => (
                     person.stage !== STAGES.unaffected
                 )).length/this.people.length) * 100;
-                message += `${totalInfected}% of the population got infected. `;
+                message += `${Math.round(totalInfected)}% of the population got infected. `;
                 const totalDead = (this.people.filter(person => (
                     person.stage === STAGES.dead
                 )).length/this.people.length) * 100;
@@ -54,6 +54,10 @@ export default class Stage {
                 }
                 document.getElementById('complete-modal-message').textContent = message;
                 clearInterval(this.animation);
+
+                document.getElementById('fb-share-button').onclick = () => {
+                    window.parent.postMessage(message, '*');
+                }
             }
         }, this.frameLength);
     }
