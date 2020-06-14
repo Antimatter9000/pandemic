@@ -37,22 +37,9 @@ export default class Stage {
             iteration++;
             if (this.people.filter(person => person.isInfectious).length < 1) {
                 this.complete = true;
-                document.getElementById('complete-modal-wrapper').classList.add('visible');
-                let message = 'The virus has run its course. ';
-                const totalInfected = (this.people.filter(person => (
-                    person.stage !== STAGES.unaffected
-                )).length/this.people.length) * 100;
-                message += `${Math.round(totalInfected)}% of the population got infected. `;
-                const totalDead = (this.people.filter(person => (
-                    person.stage === STAGES.dead
-                )).length/this.people.length) * 100;
-                message += `${totalDead}% of the population died. `;
-                if (this.income < 0) {
-                    message += 'The economy is ruined.';
-                } else {
-                    message += 'The economy survived.'
+                if (!window.location.search.includes('preview=true')) {
+                    this.showModal();
                 }
-                document.getElementById('complete-modal-message').textContent = message;
                 clearInterval(this.animation);
 
                 document.getElementById('fb-share-button').onclick = () => {
@@ -60,6 +47,25 @@ export default class Stage {
                 }
             }
         }, this.frameLength);
+    }
+
+    showModal() {
+        document.getElementById('complete-modal-wrapper').classList.add('visible');
+        let message = 'The virus has run its course. ';
+        const totalInfected = (this.people.filter(person => (
+            person.stage !== STAGES.unaffected
+        )).length/this.people.length) * 100;
+        message += `${Math.round(totalInfected)}% of the population got infected. `;
+        const totalDead = (this.people.filter(person => (
+            person.stage === STAGES.dead
+        )).length/this.people.length) * 100;
+        message += `${totalDead}% of the population died. `;
+        if (this.income < 0) {
+            message += 'The economy is ruined.';
+        } else {
+            message += 'The economy survived.'
+        }
+        document.getElementById('complete-modal-message').textContent = message;
     }
 
     endAnimation() {

@@ -25,7 +25,7 @@ function setupInputListener(id) {
     }
 }
 
-if (!window.location.search.includes('hideControls=true')) {
+if (!window.location.search.includes('preview=true')) {
     document.getElementById('controls').classList.remove('hidden');
     document.getElementById('results').classList.remove('hidden');
 }
