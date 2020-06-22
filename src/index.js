@@ -12,7 +12,8 @@ function start() {
     if (stage) {
         stage.endAnimation();
     }
-    const curve = new Curve(document.getElementById('curve'));
+    const curveEl = document.getElementById('curve');
+    const curve = new Curve(curveEl);
     stage = new Stage(document.getElementById('pandemic-canvas'), curve);
     stage.add([...Array(config.population - 1)].map(item => new Person(stage.width, stage.height, false)));
     stage.add(new Person(stage.width, stage.height, true));
@@ -37,7 +38,7 @@ setupInputListener('mortality-rate');
 setupInputListener('severity');
 setupInputListener('asymptomatic-period');
 setupInputListener('symptomatic-period');
-setupInputListener('social-distance');
+// setupInputListener('social-distance');
 
 document.getElementById('controls-toggle').onclick = () => {
     document.getElementById('results').classList.remove('visible');

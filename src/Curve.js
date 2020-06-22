@@ -2,7 +2,8 @@ import { config } from './Config';
 
 export default class Curve {
     constructor(canvas) {
-        this.ctx = canvas.getContext('2d');
+        this.el = canvas;
+        this.ctx = this.el.getContext('2d');
         this.points = [];
     }
 

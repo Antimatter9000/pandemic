@@ -20,6 +20,10 @@ export default class Stage {
         this.complete = false;
     }
 
+    get funds() {
+        return Math.floor(this.income - this.outgoings)
+    }
+
     add(people) {
         const peopleArr = people.length ? people : [people];
         this.people = [...this.people, ...peopleArr];
@@ -37,20 +41,20 @@ export default class Stage {
             iteration++;
             if (this.people.filter(person => person.isInfectious).length < 1) {
                 this.complete = true;
+                const message = this.getCompleteMessage();
+                const image = this.getImage();
                 if (!window.location.search.includes('preview=true')) {
-                    this.showModal();
+                    this.showModal(message);
+                }
+                document.getElementById('fb-share-button').onclick = () => {
+                    window.parent.postMessage({ message, image }, '*');
                 }
                 clearInterval(this.animation);
-
-                document.getElementById('fb-share-button').onclick = () => {
-                    window.parent.postMessage(message, '*');
-                }
             }
         }, this.frameLength);
     }
 
-    showModal() {
-        document.getElementById('complete-modal-wrapper').classList.add('visible');
+    getCompleteMessage() {
         let message = 'The virus has run its course. ';
         const totalInfected = (this.people.filter(person => (
             person.stage !== STAGES.unaffected
@@ -60,16 +64,21 @@ export default class Stage {
             person.stage === STAGES.dead
         )).length/this.people.length) * 100;
         message += `${totalDead}% of the population died. `;
-        if (this.income < 0) {
-            message += 'The economy is ruined.';
-        } else {
-            message += 'The economy survived.'
-        }
+        message += this.funds < 0 ? 'The economy is ruined.' : 'The economy survived.';
+        return message;
+    }
+
+    getImage() {
+        return this.curve.el.toDataURL('image/jpeg', 1.0);
+    }
+
+    showModal(message) {
+        document.getElementById('complete-modal-wrapper').classList.add('visible');
         document.getElementById('complete-modal-message').textContent = message;
     }
 
     endAnimation() {
-        clearInterval(this.animation)
+        clearInterval(this.animation);
     }
 
     calculateDay(i) {
@@ -114,7 +123,7 @@ export default class Stage {
         this.updateEl('infected', this.infected);
         this.updateEl('immune', this.people.filter(person => person.stage === STAGES.immune).length);
         this.updateEl('dead', this.people.filter(person => person.stage === STAGES.dead).length);
-        this.updateEl('funds', addCommas(Math.floor(this.income - this.outgoings)));
+        this.updateEl('funds', addCommas(this.funds));
     }
 
     updateEl(id, val) {
