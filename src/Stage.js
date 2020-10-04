@@ -46,8 +46,9 @@ export default class Stage {
                 if (!window.location.search.includes('preview=true')) {
                     this.showModal(message);
                 }
+                window.parent.postMessage({ action: 'updateData', message, image }, '*');
                 document.getElementById('fb-share-button').onclick = () => {
-                    window.parent.postMessage({ message, image }, '*');
+                    window.parent.postMessage({ action: 'share' }, '*');
                 }
                 clearInterval(this.animation);
             }
