@@ -43,8 +43,9 @@ export default class Stage {
                 this.complete = true;
                 const message = this.getCompleteMessage();
                 const image = this.getImage();
+                console.log('got image', image);
                 if (!window.location.search.includes('preview=true')) {
-                    this.showModal(message);
+                    this.showModal(message, image);
                 }
                 window.parent.postMessage({ action: 'updateData', image, message }, '*');
                 clearInterval(this.animation);
@@ -67,11 +68,12 @@ export default class Stage {
     }
 
     getImage() {
-        return this.curve.el.toDataURL('image/jpeg', 1.0);
+        return this.curve.completeImage;
     }
 
-    showModal(message) {
+    showModal(message, image) {
         document.getElementById('complete-modal-wrapper').classList.add('visible');
+        document.getElementById('complete-modal-image').src = image;
         document.getElementById('complete-modal-message').textContent = message;
     }
 
