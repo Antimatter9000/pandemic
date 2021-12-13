@@ -43,7 +43,6 @@ export default class Stage {
                 this.complete = true;
                 const message = this.getCompleteMessage();
                 const image = this.getImage();
-                console.log('got image', image);
                 if (!window.location.search.includes('preview=true')) {
                     this.showModal(message, image);
                 }
@@ -78,7 +77,6 @@ export default class Stage {
     }
 
     endAnimation() {
-        window.parent.postMessage({ action: 'updateData', image }, '*');
         clearInterval(this.animation);
     }
 
